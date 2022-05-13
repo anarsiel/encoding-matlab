@@ -2,21 +2,22 @@ clc;
 clear all;
 warning('off', 'Images:initSize:adjustingMag');
 
-video_black = 'video_black.yuv';
-input = 'short.yuv';
+qp_input = 40;
+video_black = sprintf('decoded_%i_g.yuv', qp_input);
+input = 'sasha.yuv';
 
 %create black video
-frames=30;
-fileID = fopen(video_black,'w');
+frames=120;
+% fileID = fopen(video_black,'w');
 fw=288;
 fh=360;
-tempY=zeros(1,fw*fh);
-tempUV=128*ones(1,fw*fh/2);
-for f=1:frames
-     fwrite(fileID,tempY,'uint8');
-     fwrite(fileID,tempUV,'uint8');
-end
-fclose(fileID);
+% tempY=zeros(1,fw*fh);
+% tempUV=128*ones(1,fw*fh/2);
+% for f=1:frames
+%      fwrite(fileID,tempY,'uint8');
+%      fwrite(fileID,tempUV,'uint8');
+% end
+% fclose(fileID);
 
 %create sound video
 %comment it and just use your sound video file name soundvideo
@@ -35,7 +36,7 @@ fclose(fileID);
 % end
 
 %encoding without 
-qp = [15,20,30,40]; % РК
+qp = [15,20,30,40]; % РК 
 % qp = [15]; %ЗК
 
 
@@ -50,15 +51,15 @@ if 1
         s = sprintf('"./mvhm/3dhevc/TAppDecoderStatic" -b "./mvhm/3dhevc/video.bin" -o "./input_dec.yuv"');
         system(s);
 
-        s = sprintf('decoded%i.yuv',i);
+        s = sprintf('C_input_dec_%i.yuv',i);
         
         copyfile('input_dec_1.yuv',s);
         
         PSNR = PSNRfromFile(input, s, fw, fh, frames);
-        fileID = fopen('results.txt','at');
+        results = sprintf('results/generated_%i/results.txt', qp_input);
+        fileID = fopen(results,'at');
         fprintf(fileID,'Q=%i PSNR=%g\n',qp(i),PSNR);
         fclose(fileID);
-
     end
 end
 

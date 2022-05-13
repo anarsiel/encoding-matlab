@@ -4,7 +4,7 @@ fileID1 = fopen(fname1,'rb');
 fileID2 = fopen(fname2,'rb');
 Ydec  = [];
 mse = 0;
-for f=1:frames
+for f=1:(frames)
     Y1 = fread(fileID1,fw*fh,'uint8');
     UV1 = fread(fileID1,fw*fh/2,'uint8');
     Y2 = fread(fileID2,fw*fh,'uint8');
@@ -17,5 +17,5 @@ for f=1:frames
 end
 fclose(fileID1);
 fclose(fileID2);
-mse = mse/frames;
+mse = mse/(frames);
 PSNR = 10*log10(255*255/mse);
